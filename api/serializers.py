@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Book, Note, status_choices
+from .models import User
 
 
 class BookSerializer(serializers.ModelSerializer):

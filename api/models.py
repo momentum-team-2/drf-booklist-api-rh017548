@@ -19,6 +19,7 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     added_on = models.DateTimeField(auto_now_add=True)
+    #owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books')
     status = models.CharField(max_length=10,
                   choices=status_choices,
                   default= 1)
