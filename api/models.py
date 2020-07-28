@@ -5,10 +5,11 @@ from django.db.models import Q
 from django.contrib.postgres.search import SearchVector
 
 
+
 status_choices = (
-    (1, "to read"),
-    (2, "reading"),
-    (3, "read"),)
+    ("to read", "to read"),
+    ("reading", "reading"),
+    ("read", "read"),)
 
 
 class User(AbstractUser):
@@ -19,13 +20,14 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     added_on = models.DateTimeField(auto_now_add=True)
-    #owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='books')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='books')
     status = models.CharField(max_length=10,
                   choices=status_choices,
                   default= 1)
 
 
 class Note(models.Model):
+    page_number = models.PositiveIntegerField(blank = True, null = True)
     body = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='notes')

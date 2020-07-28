@@ -3,13 +3,27 @@ from .models import Book, Note, status_choices
 from .models import User
 
 
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = ['id', 'title', 'author', 'status', 'added_on']
 
-
-class NoteSerializer(serializers.ModelSerializer):
+class NestedNoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Note
-        fields = ['id', 'body', 'owner', 'created_on']
+        fields = ['body']
+
+
+class BookSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        notes = NestedNoteSerializer(many=True)
+        model = Book
+        fields = ['url', 'id', 'title', 'author', 'status', 'added_on']
+
+
+class NoteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Note
+        fields = ['url', 'id', 'page_number', 'body', 'book', 'owner', 'created_on']
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    books = serializers.HyperlinkedRelatedField(many=True, view_name='book-detail', read_only = True)
+    class Meta:
+        model = User
+        fields = ['url', 'id', 'username', 'books']
