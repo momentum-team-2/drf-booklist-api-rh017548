@@ -25,16 +25,22 @@ class Book(models.Model):
                   choices=status_choices,
                   default= 1)
 
+    def __str__(self):
+        return f"{self.title}: {self.author}"              
+
 
 class Note(models.Model):
     page_number = models.PositiveIntegerField(blank = True, null = True)
-    body = models.TextField()
+    body = models.TextField(null= True, blank= True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='notes')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True,  related_name='notes')
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['created_on']
+    
+    def __str__(self):
+        return f'{self.book.title}'
 
 
 def get_book(queryset, user):

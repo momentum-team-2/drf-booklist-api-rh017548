@@ -11,10 +11,11 @@ class NestedNoteSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BookSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        notes = NestedNoteSerializer(many=True)
+    notes = NestedNoteSerializer(many=True, required= False)
+    
+    class Meta: 
         model = Book
-        fields = ['url', 'id', 'title', 'author', 'status', 'added_on']
+        fields = ['url', 'id', 'title', 'author',  'status', 'added_on', 'notes']
 
 
 class NoteSerializer(serializers.HyperlinkedModelSerializer):

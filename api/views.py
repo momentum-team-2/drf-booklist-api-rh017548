@@ -11,6 +11,8 @@ from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -19,6 +21,8 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['status', 'title']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
